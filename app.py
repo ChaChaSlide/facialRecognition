@@ -1,4 +1,4 @@
-from flask import Flask, request, abort, jsonify
+from flask import Flask, request, abort, jsonify, send_from_directory
 import requests
 import os
 app = Flask(__name__)
@@ -12,7 +12,7 @@ def index():
 
 
 @app.route('/Upload', methods=['GET', 'POST'])
-def verify():
+def upload():
     if request.method == 'POST':
         if not request.files:
             abort(400)
@@ -23,9 +23,17 @@ def verify():
 
         print(data)
         image = request.files['file']
-        image.save('C:\\Users\\kevin.muppattayil\\Documents', ('image_' + str(file_name_counter)))
+        global file_name_counter
+        filename = str(file_name_counter) + '.' + image.filename.rsplit('.', 1)[1].lower()
+        file_name_counter += 1
+        image.save('static\image_' + filename)
 
-    return jsonify({'status': 'success'}), 200
+    return jsonify({'status': 'success', 'image_id': filename}), 200
+
+
+@app.route('/images/<image_id>')
+def host_image(image_id):
+    return send_from_directory('static/', image_id), 200
 
 
 if __name__ == '__main__':
