@@ -1,12 +1,7 @@
 from flask import Flask, request, abort, jsonify, send_from_directory, url_for
-import os
 app = Flask(__name__)
 
-app.config['SERVER_NAME'] = 'localhost:5000'
-
 file_name_counter = 0
-
-database = {787468: {"access_areas": ['r45', 'c23', 'd5'], 'name': 'Kevin Muppattayil'}}
 
 
 @app.route('/')
@@ -14,10 +9,14 @@ def index():
     return 'Hello World'
 
 
-@app.route('/Upload', methods=['POST'])
+@app.route('/Upload', methods=['GET', 'POST'])
 def upload():
-    if not request.files or not request.headers["room_id"] or not request.headers["action"]:
-        abort(402)
+    if not request.files or not request.headers["user_id"] or not request.headers["room_id"] or not request.headers["action"]:
+        abort(400)
+
+    data = {"user_id": request.headers["user_id"],
+            "room_id": request.headers["room_id"],
+            "action": request.headers["action"]}
 
     image = request.files['file']
     global file_name_counter
@@ -25,24 +24,8 @@ def upload():
     file_name_counter += 1
     image.save('static\\' + filename)
 
-    if request.headers["action"].lower() == 'enroll':
-        if not request.headers["user_id"]:
-            abort(402)
-        print('http://' + app.config['SERVER_NAME'] + url_for('hosted_image', image_id=filename))
-        global database
-        if request.headers['name']:
-            database[request.headers['user_id']] = {'name': request.headers["name"],
-                                                    'access_areas': request.headers['room_id']}
-        else:
-            database[request.headers['user_id']] = {'name': None,
-                                                    'access_areas': request.headers['room_id']}
-        return jsonify({'status': 'success', 'user_id': request.headers['user_id']}), 200
-
-    elif request.headers["action"].lower() == 'recognize':
-        print('http://' + app.config['SERVER_NAME'] + url_for('hosted_image', image_id=filename))
-    else:
-        abort(402)
-
+    data["image_id"] = url_for('hosted_image', image_id=filename)
+    print(data)
     return jsonify({'status': 'success', 'image_id': filename}), 200
 
 
