@@ -2,7 +2,7 @@ from flask import Flask, request, abort, jsonify, send_from_directory, url_for
 import os
 app = Flask(__name__)
 
-app.config['SERVER_NAME'] = 'localhost:5000'
+#app.config['SERVER_NAME'] = 'localhost:5000'
 
 file_name_counter = 0
 
@@ -39,7 +39,7 @@ def upload():
         return jsonify({'status': 'success', 'user_id': request.headers['user_id']}), 200
 
     elif request.headers["action"].lower() == 'recognize':
-        print('http://' + app.config['SERVER_NAME'] + url_for('hosted_image', image_id=filename))
+        print('http://' + url_for('hosted_image', image_id=filename))
     else:
         abort(402)
 
