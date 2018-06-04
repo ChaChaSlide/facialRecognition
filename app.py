@@ -2,7 +2,7 @@ from flask import Flask, request, abort, jsonify, send_from_directory, url_for
 import os
 app = Flask(__name__)
 
-app.config['SERVER_NAME'] = 'infosys-facial-recognition.appspot.com'
+#app.config['SERVER_NAME'] = 'infosys-facial-recognition.appspot.com'
 
 file_name_counter = 0
 
