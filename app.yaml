@@ -1,0 +1,11 @@
+entrypoint: gunicorn -b :8080 wsgi
+env: flex
+runtime: python
+
+runtime_config:
+  python_version: 3
+
+#[START env]
+env_variables:
+    CLOUD_STORAGE_BUCKET: infosys-facial-recognition
+#[END env]
