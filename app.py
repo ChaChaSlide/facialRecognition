@@ -18,7 +18,7 @@ def index():
 
 @app.route('/Upload', methods=['POST'])
 def upload():
-    if not request.files or not request.headers['room_id'] or not request.headers['action']:
+    if not request.files or not request.headers["room_id"] or not request.headers["action"]:
         abort(406)
 
     image = request.files['file']
@@ -47,6 +47,7 @@ def upload():
 
     elif request.headers["action"].lower() == 'recognize':
         print(url_for('hosted_image', image_id=filename))
+
     else:
         abort(406)
 
@@ -56,7 +57,6 @@ def upload():
 @app.route('/images/<image_id>')
 def hosted_image(image_id):
     return send_from_directory('./static/', image_id), 200
-
 
 if __name__ == '__main__':
     app.run()
