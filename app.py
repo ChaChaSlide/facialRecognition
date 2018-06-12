@@ -54,7 +54,7 @@ def upload():
     elif request.headers["action"].lower() == 'recognize':
         confidences = karios_interface.recognize(blob.public_url)
         if not confidences or not database[confidences[0][0]]:
-            response_json {'status': 'failed'}
+            response_json = {'status': 'failed'}
         elif request.header['room_id'] in database[confidences[0][0]]['access_areas']:
             response_json = {'status': 'success','access':'granted','username': database[confidences[0][0]]['name']}
 

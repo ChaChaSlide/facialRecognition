@@ -1,4 +1,5 @@
 import requests
+from flask import Flask, render_template, request, json
 
 api_url = "https://api.kairos.com"
 app_id = "01d28598"
@@ -32,7 +33,7 @@ def recognize(image_url):
         count+=1
     resultList = list(zip(resultID,resultConfidence))
     print(resultList)
-    return resultList;
+    return resultList ;
 
 def enroll(image_url, subject_id):
     values = {
