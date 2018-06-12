@@ -1,4 +1,4 @@
-from flask import Flask, request, abort, jsonify, send_from_directory, url_for
+    from flask import Flask, request, abort, jsonify, send_from_directory, url_for
 import os
 from google.cloud import storage
 import karios_interface
@@ -19,7 +19,7 @@ def index():
 
 @app.route('/Upload', methods=['POST'])
 def upload():
-    if not request.files or not request.headers["room_id"] or not request.headers["action"]:
+    if not request.files or not 'room_id' in request.headers or not 'action' in request.headers:
         abort(406)
 
     image = request.files['file']
@@ -41,7 +41,7 @@ def upload():
         global database
 
         if kairos_interface.enroll(blob.public_url):
-            if request.headers['name']:
+            if 'name' in request.headers:
                 database[request.headers['user_id']] = {'name': request.headers["name"],
                                                         'access_areas': room_list}
             else:
@@ -53,7 +53,7 @@ def upload():
 
     elif request.headers["action"].lower() == 'recognize':
         confidences = karios_interface.recognize(blob.public_url)
-        if not confidences or not database[confidences[0][0]]:
+        if not confidences or not database[confidences  [0][0]]:
             response_json = {'status': 'failed'}
         elif request.header['room_id'] in database[confidences[0][0]]['access_areas']:
             response_json = {'status': 'success','access':'granted','username': database[confidences[0][0]]['name']}
