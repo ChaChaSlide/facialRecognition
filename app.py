@@ -20,7 +20,7 @@ def index():
 def upload():
     if not request.files:
         abort(406, 'no file sent')
-    if not 'rood_id' in request.headers or not 'action' in request.headers:
+    if not 'room_id' in request.headers or not 'action' in request.headers:
         abort(406, 'invalid headers')
 
     image = request.files['file']
