@@ -1,6 +1,7 @@
 from flask import Flask, request, abort, jsonify, send_from_directory, url_for
 import os
 from google.cloud import storage
+import karios_interface
 
 app = Flask(__name__)
 
@@ -25,33 +26,44 @@ def upload():
     global file_name_counter
     filename = 'image_' + str(file_name_counter) + '.' + image.filename.rsplit('.', 1)[1].lower()
     file_name_counter += 1
-#    image.save('static/' + filename)
 
     gcs = storage.Client()
     bucket = gcs.get_bucket(CLOUD_STORAGE_BUCKET)
     blob = bucket.blob(filename)
     blob.upload_from_file(image)
 
+    response_json = {}
     if request.headers["action"].lower() == 'enroll':
         if not request.headers["user_id"]:
             abort(406)
 
+        room_list = str(request.headers["room_id"]).split()
         global database
-        if request.headers['name']:
-            database[request.headers['user_id']] = {'name': request.headers["name"],
-                                                    'access_areas': request.headers['room_id']}
+
+        if kairos_interface.enroll(blob.public_url):
+            if request.headers['name']:
+                database[request.headers['user_id']] = {'name': request.headers["name"],
+                                                        'access_areas': room_list}
+            else:
+                database[request.headers['user_id']] = {'name': None,
+                                                        'access_areas': room_list}
+            response_json = {'status':'success'}
         else:
-            database[request.headers['user_id']] = {'name': None,
-                                                    'access_areas': request.headers['room_id']}
-        return jsonify({'status': 'success', 'user_id': request.headers['user_id']}), 200
+            response_json = {'status': 'failed'}
 
     elif request.headers["action"].lower() == 'recognize':
-        print(url_for('hosted_image', image_id=filename))
+        confidences = karios_interface.recognize(blob.public_url)
+        if not confidences or not database[confidences[0][0]]:
+            response_json {'status': 'failed'}
+        elif request.header['room_id'] in database[confidences[0][0]]['access_areas']:
+            response_json = {'status': 'success','access':'granted','username': database[confidences[0][0]]['name']}
 
+        else:
+            response_json = {'status': 'success', 'access': 'denied', 'username': database[confidences[0][0]]['name']}
     else:
         abort(406)
 
-    return jsonify({'status': 'success', 'image_id': blob.public_url}), 200
+    return jsonify(response_json), 200
 
 
 @app.route('/images/<image_id>')
