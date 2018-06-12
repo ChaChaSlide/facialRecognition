@@ -19,9 +19,9 @@ def index():
 @app.route('/Upload', methods=['POST'])
 def upload():
     if not request.files:
-        abort(406,message='no file sent')
+        abort(406, 'no file sent')
     if not 'rood_id' in request.headers or not 'action' in request.headers:
-        abort(406,message='invalid headers')
+        abort(406, 'invalid headers')
 
     image = request.files['file']
     global file_name_counter
@@ -36,7 +36,7 @@ def upload():
 
     if request.headers["action"].lower() == 'enroll':
         if not request.headers["user_id"]:
-            abort(406, message='invalid headers')
+            abort(406, 'invalid headers')
 
         global database
         if request.headers['name']:
