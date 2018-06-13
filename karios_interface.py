@@ -41,7 +41,9 @@ def recognize(image_url):
         resultList = list(zip(resultID, resultConfidence))
     except KeyError:
         return resultList
-    return (resultList);
+    return resultList
+
+
 @app.route('/enroll')
 def enroll(image_url, subject_id):
     values = {
