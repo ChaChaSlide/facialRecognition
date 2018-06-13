@@ -9,7 +9,7 @@ CLOUD_STORAGE_BUCKET = os.environ['CLOUD_STORAGE_BUCKET']
 
 file_name_counter = 0
 
-database = {787468: {"access_areas": ['r45', 'c23', 'd5'], 'name': 'Kevin Muppattayil'}}
+database = {'787468': {"access_areas": ['r45', 'c23', 'd5'], 'name': 'Kevin Muppattayil'}}
 
 
 @app.route('/')
@@ -55,8 +55,11 @@ def upload():
 
     elif request.headers["action"].lower() == 'recognize':
         confidences = karios_interface.recognize(blob.public_url)
-        if not confidences or not confidences[0][0] in database:
-            response_json = {'status': 'failed'}
+        if not confidences:
+            response_json = {'status': 'failed', 'message': 'not recognized'}
+        elif not confidences[0][0] in database:
+            response_json = {'status': 'failed', 'message': 'not in database'}
+
         elif request.header['room_id'] in database[confidences[0][0]]['access_areas']:
             response_json = {'status': 'success', 'access': 'granted', 'username': database[confidences[0][0]]['name']}
 
