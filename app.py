@@ -19,6 +19,26 @@ def index():
 
 @app.route('/Upload', methods=['POST'])
 def upload():
+    """ Stores and serves image, then registers user or checks credentials.
+        Request:
+            Headers:
+                room_id: required,
+                    if action == 'recognize': room to with access is requested
+                    if action == 'enroll': comma separated list of rooms
+                action: required, either 'recognize' or 'enroll'
+                name: optional for enroll, name to be enrolled defaults None
+                user_id: required for enroll, the identifying id of the new user
+            Body: the image file tags as 'file'
+
+        Response JSON:
+            status: if the action was successful
+                enroll will return failed on failed enrollment
+                recognize is return failed if not in gallery or database
+                success otherwise
+            message: informational message
+            access: 'Granted'  or 'Denied'
+            name: the name in the database or None
+    """
     if not request.files:
         abort(406, 'no file sent')
     if not 'room_id' in request.headers or not 'action' in request.headers:
@@ -49,7 +69,7 @@ def upload():
             else:
                 database[request.headers['user_id']] = {'name': None,
                                                         'access_areas': room_list}
-            response_json = {'status':'success'}
+            response_json = {'status': 'success'}
         else:
             response_json = {'status': 'failed'}
 
@@ -70,10 +90,6 @@ def upload():
 
     return jsonify(response_json), 200
 
-
-@app.route('/images/<image_id>')
-def hosted_image(image_id):
-    return send_from_directory('./static/', image_id), 200
 
 if __name__ == '__main__':
     app.run()
