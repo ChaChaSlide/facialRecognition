@@ -37,7 +37,7 @@ def upload():
                 success otherwise
             message: informational message
             access: 'Granted'  or 'Denied'
-            name: the name in the database or None
+            name: the name in the database or null
     """
     if not request.files:
         abort(406, 'no file sent')
