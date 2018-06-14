@@ -60,7 +60,7 @@ def upload():
         elif not confidences[0][0] in database:
             response_json = {'status': 'failed', 'message': 'not in database'}
 
-        elif request.header['room_id'] in database[confidences[0][0]]['access_areas']:
+        elif request.headers['room_id'] in database[confidences[0][0]]['access_areas']:
             response_json = {'status': 'success', 'access': 'granted', 'username': database[confidences[0][0]]['name']}
 
         else:
