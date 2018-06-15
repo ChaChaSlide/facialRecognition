@@ -62,7 +62,9 @@ def upload():
         room_list = str(request.headers["room_id"]).split()
         global database
 
-        if karios_interface.enroll(blob.public_url, request.headers['user_id']):
+        if request.headers['user_id'] in database:
+            response_json = {'status': 'failed', 'message': 'user_id already exists'}
+        elif karios_interface.enroll(blob.public_url, request.headers['user_id']):
             if 'name' in request.headers:
                 database[request.headers['user_id']] = {'name': request.headers["name"],
                                                         'access_areas': room_list}
