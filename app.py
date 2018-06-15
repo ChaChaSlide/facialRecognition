@@ -93,5 +93,23 @@ def upload():
     return jsonify(response_json), 200
 
 
+@app.route('/RemoveAll', methods=['DELETE'])
+def remove_all_users():
+    global database
+    #if karios_interface.remove_all():
+    database.clear()
+    return jsonify({'status': 'success'}), 200
+
+
+@app.route('remove/<user_id>', methods=['DELETE'])
+def remove_user(user_id):
+    global database
+    if user_id not in database:
+        abort(404, 'user id not found in database')
+    #if karios_interface.remove(user_id):
+    database.pop(user_id)
+    return jsonify({'status': 'success'}), 200
+
+
 if __name__ == '__main__':
     app.run()
