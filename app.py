@@ -113,7 +113,7 @@ def remove_user(user_id):
     global database
     if user_id not in database:
         abort(404, 'user id not found in database')
-    if karios_interface.remove(user_id):
+    if karios_interface.remove_subject(user_id):
         database.pop(user_id)
         return jsonify({'status': 'success'}), 200
     return jsonify({'status': 'failed'}), 200
