@@ -59,7 +59,33 @@ def enroll(image_url, subject_id):
     else:
         return False;
 
-enroll(image_url="http://media.kairos.com/kairos-lizabeth.jpg", subject_id="Elizabeth")
-#recognize(image_url="https://storage.googleapis.com/infosys-facial-recognition/image_2.jpg")
+@app.route('/remove_subject')
+def remove_subject(subject_id):
+    values = {
+                "subject_id": subject_id,
+                "gallery_name": gallery
+            }
+
+    request = requests.post('https://api.kairos.com/gallery/remove_subject', data=bytes(json.dumps(values), encoding="utf-8"), headers=headers)
+    response_body = json.loads(request.text)
+    print(response_body.get('status'))
+    if response_body.get('status') == 'Complete':
+        return True
+    else:
+        return False
+
+@app.route('/remove_gallery')
+def remove_gallery():
+    values = {
+                "gallery_name": gallery
+            }
+
+    request = requests.post('https://api.kairos.com/gallery/remove', data=bytes(json.dumps(values), encoding="utf-8"), headers=headers)
+    response_body = json.loads(request.text)
+    if response_body.get('status') == 'Complete':
+        return True
+    else:
+        return False
+
 if __name__ == '__main__':
     app.run()
