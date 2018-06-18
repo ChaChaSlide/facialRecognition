@@ -41,7 +41,7 @@ def upload():
     """
     if not request.files:
         abort(406, 'no file sent')
-    if not 'room_id' in request.headers or not 'action' in request.headers:
+    if 'room_id' not in request.headers or 'action' not in request.headers:
         abort(406, 'invalid headers')
 
     image = request.files['file']
@@ -59,7 +59,7 @@ def upload():
         if not request.headers["user_id"]:
             abort(406, 'invalid headers')
 
-        room_list = str(request.headers["room_id"]).split()
+        room_list = str(request.headers["room_id"]).split(',')
         global database
 
         if request.headers['user_id'] in database:
@@ -118,6 +118,10 @@ def remove_user(user_id):
         return jsonify({'status': 'success'}), 200
     return jsonify({'status': 'failed'}), 200
 
+
+@app.route('/dev/list', methods=['GET'])
+def list_database():
+    return jsonify(database), 200
 
 if __name__ == '__main__':
     app.run()
