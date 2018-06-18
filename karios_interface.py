@@ -1,8 +1,6 @@
 import requests
 from flask import Flask, json
 
-app = Flask(__name__)
-
 api_url = "https://api.kairos.com"
 app_id = "01d28598"
 app_key = "d995adad6b5a3e0bd47a4dc3bcff5202"
@@ -13,12 +11,6 @@ headers = {
     "app_id": app_id,
     "app_key": app_key
 }
-
-@app.route('/')
-def index():
-    return 'Hello World!'
-
-@app.route('/recognize')
 def recognize(image_url):
     values = {
             'image': image_url,
@@ -44,7 +36,6 @@ def recognize(image_url):
     return resultList
 
 
-@app.route('/enroll')
 def enroll(image_url, subject_id):
     values = {
                 "image": image_url,
@@ -59,7 +50,7 @@ def enroll(image_url, subject_id):
     else:
         return False;
 
-@app.route('/remove_subject')
+
 def remove_subject(subject_id):
     values = {
                 "subject_id": subject_id,
@@ -74,7 +65,7 @@ def remove_subject(subject_id):
     else:
         return False
 
-@app.route('/remove_gallery')
+
 def remove_gallery():
     values = {
                 "gallery_name": gallery
@@ -86,6 +77,3 @@ def remove_gallery():
         return True
     else:
         return False
-
-if __name__ == '__main__':
-    app.run()

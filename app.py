@@ -20,24 +20,24 @@ def index():
 @app.route('/Upload', methods=['POST'])
 def upload():
     """ Stores and serves image, then registers user or checks credentials.
-        Request:
-            Headers:
-                room_id: required,
+        Request--
+            Headers--
+                room_id-- required,
                     if action == 'recognize': room to with access is requested
                     if action == 'enroll': comma separated list of rooms
-                action: required, either 'recognize' or 'enroll'
-                name: optional for enroll, name to be enrolled defaults None
-                user_id: required for enroll, the identifying id of the new user
-            Body: the image file tags as 'file'
+                action-- required, either 'recognize' or 'enroll'
+                name-- optional for enroll, name to be enrolled defaults None
+                user_id-- required for enroll, the identifying id of the new user
+            Body-- the image file tags as 'file'
 
-        Response JSON:
-            status: if the action was successful
+        Response JSON--
+            status-- if the action was successful
                 enroll will return failed on failed enrollment
                 recognize is return failed if not in gallery or database
                 success otherwise
-            message: informational message
-            access: 'Granted'  or 'Denied'
-            name: the name in the database or null
+            message-- informational message
+            access-- 'Granted'  or 'Denied'
+            name-- the name in the database or null
     """
     if not request.files:
         abort(406, 'no file sent')
@@ -90,25 +90,33 @@ def upload():
     else:
         abort(406)
 
+    blob.delete()
+
     return jsonify(response_json), 200
 
 
 @app.route('/RemoveAll', methods=['DELETE'])
 def remove_all_users():
+    """ Removes all subjects from kairos gallery"""
     global database
-    #if karios_interface.remove_all():
-    database.clear()
-    return jsonify({'status': 'success'}), 200
+    if karios_interface.remove_gallery():
+        database.clear()
+        return jsonify({'status': 'success'}), 200
+    return jsonify({'status': 'failed'}), 200
 
 
 @app.route('remove/<user_id>', methods=['DELETE'])
 def remove_user(user_id):
+    """ Removes specified user from kairos gallery
+        user_id -- in query string as the subject_id in gallery
+    """
     global database
     if user_id not in database:
         abort(404, 'user id not found in database')
-    #if karios_interface.remove(user_id):
-    database.pop(user_id)
-    return jsonify({'status': 'success'}), 200
+    if karios_interface.remove(user_id):
+        database.pop(user_id)
+        return jsonify({'status': 'success'}), 200
+    return jsonify({'status': 'failed'}), 200
 
 
 if __name__ == '__main__':
