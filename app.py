@@ -60,6 +60,9 @@ def upload():
             abort(406, 'invalid headers')
 
         room_list = str(request.headers["room_id"]).split(',')
+        for room in room_list:
+            room.strip(' ')
+        
         global database
 
         if request.headers['user_id'] in database:
