@@ -105,7 +105,7 @@ def remove_all_users():
     return jsonify({'status': 'failed'}), 200
 
 
-@app.route('remove/<user_id>', methods=['DELETE'])
+@app.route('/remove/<user_id>', methods=['DELETE'])
 def remove_user(user_id):
     """ Removes specified user from kairos gallery
         user_id -- in query string as the subject_id in gallery
