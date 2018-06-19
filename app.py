@@ -52,11 +52,11 @@ def upload():
     blob.upload_from_file(image)
 
     response_json = {}
-    if request.headers["action"].lower() == 'enroll':
-        if not request.headers["user_id"]:
+    if request.headers['action'].lower() == 'enroll':
+        if 'user_id' not in request.headers:
             abort(406, 'invalid headers')
 
-        room_list = str(request.headers["room_id"]).split(',')
+        room_list = str(request.headers['room_id']).split(',')
         for room in room_list:
             room.strip(' ')
 
@@ -70,12 +70,12 @@ def upload():
         else:
             response_json = {'status': 'failed', 'message': 'user_id already exists'}
 
-    elif request.headers["action"].lower() == 'recognize':
+    elif request.headers['action'].lower() == 'recognize':
         confidences = karios_interface.recognize(blob.public_url)
         if not confidences:
             response_json = {'status': 'failed', 'message': 'not recognized'}
         else:
-            user = repo.find_user(request.headers['user_id'])
+            user = repo.find_user(confidences[0][0])
             if not user:
                 response_json = {'status': 'failed', 'message': 'not in database'}
 
