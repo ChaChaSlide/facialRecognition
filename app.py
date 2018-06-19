@@ -58,7 +58,7 @@ def upload():
 
         room_list = str(request.headers["room_id"]).split(',')
         for room in room_list:
-            room.strip([' '])
+            room.strip(' ')
 
         if not repo.find_user(request.headers['user_id']):
             if karios_interface.enroll(blob.public_url, request.headers['user_id']):
