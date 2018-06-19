@@ -37,9 +37,8 @@ class MongoDAO:
         if not counter:
             return False
         val = counter['value']
-        counter['value'] = val+1
         try:
-            self.file_counter.update(counter)
+            self.file_counter.update_one({'name': 'file_counter'}, {'$inc':{'value': 1}})
         except InvalidOperation:
             return False
         return val
