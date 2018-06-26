@@ -3,6 +3,7 @@ from pymongo.errors import InvalidOperation
 
 
 class MongoDAO:
+    """" Data Access Object class for use with MongoDB"""
     def __init__(self):
         self.client = MongoClient('mongodb+srv://Admin:openpass@cluster0-dxfvh.gcp.mongodb.net/test?retryWrites=true')
         self.db = self.client['IFR']
