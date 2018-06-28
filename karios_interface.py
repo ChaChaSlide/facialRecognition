@@ -12,6 +12,13 @@ headers = {
     "app_key": app_key
 }
 def recognize(image_url):
+    ''' Checks whether the face passed as argument is recognized in Gallery.
+
+        :param image_url: Url to Server hosted image, to be sent to Kairos API.
+
+        :returns List: List of candidates who have 60% confidence level.
+
+    '''
     values = {
             'image': image_url,
             'gallery_name': gallery
@@ -37,6 +44,15 @@ def recognize(image_url):
 
 
 def enroll(image_url, subject_id):
+    ''' Enrolls new subjects into the gallery, using their face mapping and unique ID as identifiers.
+
+        :param
+            image_url (string): Url to Server hosted image, to be sent to Kairos API.
+            subject_id (string): ID of subject to be enrolled into the gallery.
+
+        :returns
+            True/False: Dependant on whether the subject could be enrolled successfully or not.
+    '''
     values = {
                 "image": image_url,
                 "subject_id": subject_id,
@@ -52,6 +68,12 @@ def enroll(image_url, subject_id):
 
 
 def remove_subject(subject_id):
+    ''' Removes subject from Gallery based on ID sent.
+
+        :param subject_id: ID of subject to be removed form Gallery.
+
+        :return: True on successful delete, False if subject could not be removed or ID was not found.
+    '''
     values = {
                 "subject_id": subject_id,
                 "gallery_name": gallery
@@ -67,6 +89,11 @@ def remove_subject(subject_id):
 
 
 def remove_gallery():
+    ''' Removes entire gallery of faces.
+
+        :return: True if gallery is removed. False if it could not be removed, or if gallery could not be found.
+
+    '''
     values = {
                 "gallery_name": gallery
             }
