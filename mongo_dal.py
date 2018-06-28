@@ -30,8 +30,7 @@ class MongoDAO:
         self.users.remove(user_id)
 
     def remove_all(self):
-        self.db.drop_collection(self.users)
-        self.db.create_collection('users')
+        self.users.remove()
 
     def get_file_counter(self):
         counter = self.file_counter.find_one({'name': 'file_counter'})
