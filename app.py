@@ -98,7 +98,7 @@ def remove_all_users():
     if karios_interface.remove_gallery():
         repo.remove_all()
         return jsonify({'status': 'success'}), 200
-    return jsonify({'status': 'failed'}), 200
+    return jsonify({'status': 'failed', 'message': 'gallery not available'}), 200
 
 
 @app.route('/Remove/<user_id>', methods=['DELETE'])
@@ -112,7 +112,7 @@ def remove_user(user_id):
     if karios_interface.remove_subject(user_id):
         repo.remove_user(user_id)
         return jsonify({'status': 'success'}), 200
-    return jsonify({'status': 'failed'}), 200
+    return jsonify({'status': 'failed', 'message': 'gallery not available'}), 200
 
 
 if __name__ == '__main__':
