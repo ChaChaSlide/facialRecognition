@@ -33,10 +33,10 @@ def recognize(image_url):
         resultConfidence = []
 
         for i in results['candidates']:
-           if results['candidates'][count]['confidence'] > .60:
+            if results['candidates'][count]['confidence'] > .60:
                 resultID.append(results['candidates'][0]['subject_id'])
                 resultConfidence.append(results['candidates'][0]['confidence'])
-           count+=1
+            count += 1
         resultList = list(zip(resultID, resultConfidence))
     except KeyError:
         return resultList
