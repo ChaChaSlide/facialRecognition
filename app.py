@@ -3,6 +3,7 @@ import os
 from google.cloud import storage
 import karios_interface
 from mongo_dal import MongoDAO
+import logging
 
 app = Flask(__name__)
 
@@ -76,7 +77,7 @@ def upload():
         else:
             user = repo.find_user(confidences[0][0])
             for target in confidences:
-                print('ID: ' + target[0] + '/n Confidence: ' + str(target[1]))
+                logging.info('ID: ' + target[0] + '/n Confidence: ' + str(target[1]))
             if not user:
                 response_json = {'status': 'failed', 'message': 'not in database'}
 
