@@ -1,11 +1,13 @@
 from pymongo import MongoClient
 from pymongo.errors import InvalidOperation
+import os
 
+MONGO_ADDRESS = os.environ['MONGO_DB_LOCATION']
 
 class MongoDAO:
     """" Data Access Object class for use with MongoDB"""
     def __init__(self):
-        self.client = MongoClient('mongodb+srv://Admin:openpass@cluster0-dxfvh.gcp.mongodb.net/test?retryWrites=true')
+        self.client = MongoClient(MONGO_ADDRESS)
         self.db = self.client['IFR']
         self.users = self.db['users']
         self.file_counter = self.db['counters']

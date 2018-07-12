@@ -1,27 +1,28 @@
 import requests
 from flask import Flask, json
+import os
 
-api_url = "https://api.kairos.com"
-app_id = "01d28598"
-app_key = "d995adad6b5a3e0bd47a4dc3bcff5202"
-gallery = "MyGallery"
+API_URL = os.environ['API_URL']
+APP_ID = os.environ['APP_ID']
+APP_KEY = os.environ['APP_KEY']
+GALLERY_NAME = os.environ['GALLERY_NAME']
 
 headers = {
     'Content-Type': 'application/json',
-    "app_id": app_id,
-    "app_key": app_key
+    "app_id": APP_ID,
+    "app_key": APP_KEY
 }
 def recognize(image_url):
-    ''' Checks whether the face passed as argument is recognized in Gallery.
+    """ Checks whether the face passed as argument is recognized in Gallery.
 
         :param image_url: Url to Server hosted image, to be sent to Kairos API.
 
         :returns List: List of candidates who have 60% confidence level.
 
-    '''
+    """
     values = {
             'image': image_url,
-            'gallery_name': gallery
+            'gallery_name': GALLERY_NAME
         }
     request = requests.post('https://api.kairos.com/recognize', data=bytes(json.dumps(values), encoding="utf-8"), headers=headers)
     json_data = json.loads(request.text)
@@ -56,7 +57,7 @@ def enroll(image_url, subject_id):
     values = {
                 "image": image_url,
                 "subject_id": subject_id,
-                "gallery_name": gallery
+                "gallery_name": GALLERY_NAME
             }
 
     request = requests.post('https://api.kairos.com/enroll', data=bytes(json.dumps(values), encoding="utf-8"), headers=headers)
@@ -76,7 +77,7 @@ def remove_subject(subject_id):
     '''
     values = {
                 "subject_id": subject_id,
-                "gallery_name": gallery
+                "gallery_name": GALLERY_NAME
             }
 
     request = requests.post('https://api.kairos.com/gallery/remove_subject', data=bytes(json.dumps(values), encoding="utf-8"), headers=headers)
@@ -95,7 +96,7 @@ def remove_gallery():
 
     '''
     values = {
-                "gallery_name": gallery
+                "gallery_name": GALLERY_NAME
             }
 
     request = requests.post('https://api.kairos.com/gallery/remove', data=bytes(json.dumps(values), encoding="utf-8"), headers=headers)
