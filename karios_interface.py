@@ -6,7 +6,7 @@ API_URL = os.environ['API_URL']
 APP_ID = os.environ['APP_ID']
 APP_KEY = os.environ['APP_KEY']
 GALLERY_NAME = os.environ['GALLERY_NAME']
-
+CONFIDENCE_LEVEL = os.environ['CONFIDENCE_LEVEL']
 headers = {
     'Content-Type': 'application/json',
     "app_id": APP_ID,
@@ -26,22 +26,16 @@ def recognize(image_url):
         }
     request = requests.post('https://api.kairos.com/recognize', data=bytes(json.dumps(values), encoding="utf-8"), headers=headers)
     json_data = json.loads(request.text)
-    resultList = []
-    try:
-        results = json_data['images'][0]
-        count = 0
-        resultID = []
-        resultConfidence = []
+    result_list = []
+    results = json_data['images'][0]
 
-        for i in results['candidates']:
-            if results['candidates'][count]['confidence'] > .60:
-                resultID.append(results['candidates'][0]['subject_id'])
-                resultConfidence.append(results['candidates'][0]['confidence'])
-            count += 1
-        resultList = list(zip(resultID, resultConfidence))
-    except KeyError:
-        return resultList
-    return resultList
+    if not results['candidates']:
+        return result_list
+    for candidate in results['candidates']:
+        if candidate['confidence'] > CONFIDENCE_LEVEL:
+            result_list.append((candidate['subject_id'],candidate['confidence']))
+
+    return result_list
 
 
 def enroll(image_url, subject_id):

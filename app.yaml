@@ -13,4 +13,5 @@ env_variables:
     APP_ID: 01d28598
     APP_KEY: d995adad6b5a3e0bd47a4dc3bcff5202
     GALLERY_NAME: MyGallery
+    CONFIDENCE_LEVEL: .6
 #[END env]
