@@ -27,17 +27,17 @@ def recognize(image_url):
         }
     request = requests.post('https://api.kairos.com/recognize', data=bytes(json.dumps(values), encoding="utf-8"), headers=headers)
     json_data = json.loads(request.text)
-   
+
     result_list = []
-    
+
     if not json_data['images']:
         return result_list
 
-    if not json_data['images']['candidates']:
+    if not json_data['images']:
         return result_list
-    for candidate in results['candidates']:
+    for candidate in json_data['images'][0]['candidates']:
         if candidate['confidence'] > float(CONFIDENCE_LEVEL):
-            result_list.append((candidate['subject_id'],candidate['confidence']))
+            result_list.append((candidate['subject_id'], candidate['confidence']))
 
     return result_list
 
