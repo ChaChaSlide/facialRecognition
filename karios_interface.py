@@ -2,7 +2,6 @@ import requests
 from flask import Flask, json
 import os
 
-API_URL = os.environ['API_URL']
 APP_ID = os.environ['APP_ID']
 APP_KEY = os.environ['APP_KEY']
 GALLERY_NAME = os.environ['GALLERY_NAME']

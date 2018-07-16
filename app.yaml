@@ -9,7 +9,6 @@ runtime_config:
 env_variables:
     CLOUD_STORAGE_BUCKET: infosys-facial-recognition
     MONGO_DB_LOCATION: mongodb+srv://Admin:openpass@cluster0-dxfvh.gcp.mongodb.net/test?retryWrites=true
-    API_URL: https://api.kairos.com
     APP_ID: 01d28598
     APP_KEY: d995adad6b5a3e0bd47a4dc3bcff5202
     GALLERY_NAME: MyGallery
