@@ -1,6 +1,7 @@
 from pymongo import MongoClient
-from pymongo.errors import InvalidOperation
+from pymongo.errors import InvalidOperation, ConnectionFailure
 import os
+from flask import abort
 
 MONGO_ADDRESS = os.environ['MONGO_DB_LOCATION']
 
@@ -11,6 +12,11 @@ class MongoDAO:
         self.db = self.client['IFR']
         self.users = self.db['users']
         self.file_counter = self.db['counters']
+        try:
+            self.client.admin.command('ismaster')
+        except ConnectionFailure:
+            print('Database is not available')
+            abort(503, 'Database is not available')
 
     def add_user(self, user_id, room_list, name=None):
         user = {'_id': user_id,
