@@ -29,11 +29,9 @@ def recognize(image_url):
 
     result_list = []
 
-    if not json_data['images']:
+    if 'images' not in json_data:
         return result_list
 
-    if not json_data['images']:
-        return result_list
     for candidate in json_data['images'][0]['candidates']:
         if candidate['confidence'] > float(CONFIDENCE_LEVEL):
             result_list.append((candidate['subject_id'], candidate['confidence']))
