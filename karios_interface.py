@@ -7,6 +7,7 @@ APP_ID = os.environ['APP_ID']
 APP_KEY = os.environ['APP_KEY']
 GALLERY_NAME = os.environ['GALLERY_NAME']
 CONFIDENCE_LEVEL = os.environ['CONFIDENCE_LEVEL']
+
 headers = {
     'Content-Type': 'application/json',
     "app_id": APP_ID,
@@ -32,7 +33,7 @@ def recognize(image_url):
     if not results['candidates']:
         return result_list
     for candidate in results['candidates']:
-        if candidate['confidence'] > CONFIDENCE_LEVEL:
+        if candidate['confidence'] > float(CONFIDENCE_LEVEL):
             result_list.append((candidate['subject_id'],candidate['confidence']))
 
     return result_list
