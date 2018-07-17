@@ -75,7 +75,8 @@ def upload():
         if not confidences:
             response_json = {'status': 'failed', 'message': 'not recognized'}
         else:
-            print(confidences)
+            for confidence in confidences:
+                print('User ID: ' + confidence[0] + ', Confidence: ' + confidence[1])
 
             user = repo.find_user(confidences[0][0])
             if not user:

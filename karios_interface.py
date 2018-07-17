@@ -14,11 +14,8 @@ headers = {
 }
 def recognize(image_url):
     """ Checks whether the face passed as argument is recognized in Gallery.
-
         :param image_url: Url to Server hosted image, to be sent to Kairos API.
-
         :returns List: List of candidates who have 60% confidence level.
-
     """
     values = {
             'image': image_url,
