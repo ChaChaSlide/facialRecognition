@@ -86,9 +86,8 @@ def upload():
 
             else:
                 response_json = {'status': 'success', 'access': 'denied', 'username': user['name']}
-            response_json['confidence_list'] = confidences
     else:
-        abort(406)
+        abort(406, 'invalid action')
 
     blob.delete()
 

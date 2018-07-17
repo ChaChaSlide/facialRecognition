@@ -1,5 +1,5 @@
 import requests
-from flask import Flask, json
+from flask import json, abort
 import os
 
 APP_ID = os.environ['APP_ID']
@@ -24,8 +24,11 @@ def recognize(image_url):
             'image': image_url,
             'gallery_name': GALLERY_NAME
         }
-    request = requests.post('https://api.kairos.com/recognize', data=bytes(json.dumps(values), encoding="utf-8"), headers=headers)
-    json_data = json.loads(request.text)
+    response = requests.post('https://api.kairos.com/recognize', data=bytes(json.dumps(values), encoding="utf-8"), headers=headers)
+    print('Kairos HTTP Status: ' + str(response.status_code))
+    if response.status_code == 429:
+        abort(503, 'too many request to kairos')
+    json_data = json.loads(response.text)
 
     result_list = []
 
@@ -55,8 +58,11 @@ def enroll(image_url, subject_id):
                 "gallery_name": GALLERY_NAME
             }
 
-    request = requests.post('https://api.kairos.com/enroll', data=bytes(json.dumps(values), encoding="utf-8"), headers=headers)
-    response_body = json.loads(request.text)
+    response = requests.post('https://api.kairos.com/enroll', data=bytes(json.dumps(values), encoding="utf-8"), headers=headers)
+    print('Kairos HTTP Status: ' + str(response.status_code))
+    if response.status_code == 429:
+        abort(503, 'too many request to kairos')
+    response_body = json.loads(response.text)
     if len(response_body.keys()) > 1:
         return True
     else:
@@ -75,8 +81,11 @@ def remove_subject(subject_id):
                 "gallery_name": GALLERY_NAME
             }
 
-    request = requests.post('https://api.kairos.com/gallery/remove_subject', data=bytes(json.dumps(values), encoding="utf-8"), headers=headers)
-    response_body = json.loads(request.text)
+    response = requests.post('https://api.kairos.com/gallery/remove_subject', data=bytes(json.dumps(values), encoding="utf-8"), headers=headers)
+    print('Kairos HTTP Status: ' + str(response.status_code))
+    if response.status_code == 429:
+        abort(503, 'too many request to kairos')
+    response_body = json.loads(response.text)
     print(response_body.get('status'))
     if response_body.get('status') == 'Complete':
         return True
@@ -94,8 +103,11 @@ def remove_gallery():
                 "gallery_name": GALLERY_NAME
             }
 
-    request = requests.post('https://api.kairos.com/gallery/remove', data=bytes(json.dumps(values), encoding="utf-8"), headers=headers)
-    response_body = json.loads(request.text)
+    response = requests.post('https://api.kairos.com/gallery/remove', data=bytes(json.dumps(values), encoding="utf-8"), headers=headers)
+    print('Kairos HTTP Status: ' + str(response.status_code))
+    if response.status_code == 429:
+        abort(503, 'too many request to kairos')
+    response_body = json.loads(response.text)
     if response_body.get('status') == 'Complete':
         return True
     else:
