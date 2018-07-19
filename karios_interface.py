@@ -63,6 +63,7 @@ def enroll(image_url, subject_id):
     if len(response_body.keys()) > 1:
         return True
     else:
+        print('Karios Error: ' + str(response_body['Errors'][0]['ErrCode']) + ': ' + response_body['Errors'][0]['Message'])
         return False;
 
 
