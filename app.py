@@ -67,6 +67,8 @@ def upload():
                 else:
                     repo.add_user(request.headers['user_id'], room_list)
                 response_json = {'status': 'success'}
+            else:
+                response_json = {'status': 'failed', 'message': 'not valid image'}
         else:
             response_json = {'status': 'failed', 'message': 'user_id already exists'}
 
