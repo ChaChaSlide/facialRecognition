@@ -92,7 +92,7 @@ def upload():
 
     blob.delete()
 
-    print('Response JSON: ' + response_json)
+    print('Response JSON: ' + str(response_json))
 
     return jsonify(response_json), 200
 
