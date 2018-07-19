@@ -12,16 +12,19 @@ headers = {
     "app_id": APP_ID,
     "app_key": APP_KEY
 }
+
+
 def recognize(image_url):
     """ Checks whether the face passed as argument is recognized in Gallery.
         :param image_url: Url to Server hosted image, to be sent to Kairos API.
         :returns List: List of candidates who have 60% confidence level.
     """
     values = {
-            'image': image_url,
-            'gallery_name': GALLERY_NAME
-        }
-    response = requests.post('https://api.kairos.com/recognize', data=bytes(json.dumps(values), encoding="utf-8"), headers=headers)
+        'image': image_url,
+        'gallery_name': GALLERY_NAME
+    }
+    response = requests.post('https://api.kairos.com/recognize', data=bytes(json.dumps(values), encoding="utf-8"),
+                             headers=headers)
     print('Kairos HTTP Status: ' + str(response.status_code))
     if response.status_code == 429:
         abort(503, 'too many request to kairos')
@@ -50,12 +53,13 @@ def enroll(image_url, subject_id):
             True/False: Dependant on whether the subject could be enrolled successfully or not.
     '''
     values = {
-                "image": image_url,
-                "subject_id": subject_id,
-                "gallery_name": GALLERY_NAME
-            }
+        "image": image_url,
+        "subject_id": subject_id,
+        "gallery_name": GALLERY_NAME
+    }
 
-    response = requests.post('https://api.kairos.com/enroll', data=bytes(json.dumps(values), encoding="utf-8"), headers=headers)
+    response = requests.post('https://api.kairos.com/enroll', data=bytes(json.dumps(values), encoding="utf-8"),
+                             headers=headers)
     print('Kairos HTTP Status: ' + str(response.status_code))
     if response.status_code == 429:
         abort(503, 'too many request to kairos')
@@ -63,7 +67,8 @@ def enroll(image_url, subject_id):
     if len(response_body.keys()) > 1:
         return True
     else:
-        print('Karios Error: ' + str(response_body['Errors'][0]['ErrCode']) + ': ' + response_body['Errors'][0]['Message'])
+        print('Karios Error: ' + str(response_body['Errors'][0]['ErrCode']) + ': ' + response_body['Errors'][0][
+            'Message'])
         return False;
 
 
@@ -75,11 +80,12 @@ def remove_subject(subject_id):
         :return: True on successful delete, False if subject could not be removed or ID was not found.
     '''
     values = {
-                "subject_id": subject_id,
-                "gallery_name": GALLERY_NAME
-            }
+        "subject_id": subject_id,
+        "gallery_name": GALLERY_NAME
+    }
 
-    response = requests.post('https://api.kairos.com/gallery/remove_subject', data=bytes(json.dumps(values), encoding="utf-8"), headers=headers)
+    response = requests.post('https://api.kairos.com/gallery/remove_subject',
+                             data=bytes(json.dumps(values), encoding="utf-8"), headers=headers)
     print('Kairos HTTP Status: ' + str(response.status_code))
     if response.status_code == 429:
         abort(503, 'too many request to kairos')
@@ -88,6 +94,8 @@ def remove_subject(subject_id):
     if response_body.get('status') == 'Complete':
         return True
     else:
+        print('Karios Error: ' + str(response_body['Errors'][0]['ErrCode']) + ': ' + response_body['Errors'][0][
+            'Message'])
         return False
 
 
@@ -98,10 +106,11 @@ def remove_gallery():
 
     '''
     values = {
-                "gallery_name": GALLERY_NAME
-            }
+        "gallery_name": GALLERY_NAME
+    }
 
-    response = requests.post('https://api.kairos.com/gallery/remove', data=bytes(json.dumps(values), encoding="utf-8"), headers=headers)
+    response = requests.post('https://api.kairos.com/gallery/remove', data=bytes(json.dumps(values), encoding="utf-8"),
+                             headers=headers)
     print('Kairos HTTP Status: ' + str(response.status_code))
     if response.status_code == 429:
         abort(503, 'too many request to kairos')
@@ -109,4 +118,6 @@ def remove_gallery():
     if response_body.get('status') == 'Complete':
         return True
     else:
+        print('Karios Error: ' + str(response_body['Errors'][0]['ErrCode']) + ': ' + response_body['Errors'][0][
+            'Message'])
         return False
