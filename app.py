@@ -92,6 +92,8 @@ def upload():
 
     blob.delete()
 
+    print('Response JSON: ' + response_json)
+
     return jsonify(response_json), 200
 
 
