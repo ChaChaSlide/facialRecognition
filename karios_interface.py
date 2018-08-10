@@ -32,6 +32,8 @@ def recognize(image_url):
 
     result_list = []
 
+    print("Kairos Response JSON: " + str(json_data))
+
     if 'images' not in json_data:
         return result_list
 
