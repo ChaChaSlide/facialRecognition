@@ -12,5 +12,5 @@ The server is available on the __GAE__ branch
 The server is running on Google App Engine (GAE) at [IFR Server](http://infosys-facial-recog.appspot.com)
 
 ## IFR Client
-The client is available on the __rpi__ branch
+The client is available on the __rpi__ branch  
 The client is designed to run on __Raspberry Pi__ systems
