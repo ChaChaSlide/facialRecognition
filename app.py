@@ -1,7 +1,7 @@
 from flask import Flask, request, abort, jsonify
 import os
 from google.cloud import storage
-import karios_interface
+import kairos_interface
 from mongo_dal import MongoDAO
 import logging
 
@@ -61,7 +61,7 @@ def upload():
         room_list = [room.strip() for room in room_list]
 
         if not repo.find_user(request.headers['user_id']):
-            if karios_interface.enroll(blob.public_url, request.headers['user_id']):
+            if kairos_interface.enroll(blob.public_url, request.headers['user_id']):
                 if 'name' in request.headers:
                     repo.add_user(request.headers['user_id'], room_list, name=request.headers['name'])
                 else:
@@ -73,7 +73,7 @@ def upload():
             response_json = {'status': 'failed', 'message': 'user_id already exists'}
 
     elif request.headers['action'].lower() == 'recognize':
-        confidences = karios_interface.recognize(blob.public_url)
+        confidences = kairos_interface.recognize(blob.public_url)
         if not confidences:
             response_json = {'status': 'failed', 'message': 'not recognized'}
         else:
@@ -103,7 +103,7 @@ def upload():
 def remove_all_users():
     """ Removes all subjects from kairos gallery"""
     repo = MongoDAO()
-    if karios_interface.remove_gallery():
+    if kairos_interface.remove_gallery():
         repo.remove_all()
         return jsonify({'status': 'success'}), 200
     return jsonify({'status': 'failed', 'message': 'gallery not available'}), 200
@@ -117,7 +117,7 @@ def remove_user(user_id):
     repo = MongoDAO()
     if not repo.find_user(user_id):
         abort(404, 'user id not found in database')
-    if karios_interface.remove_subject(user_id):
+    if kairos_interface.remove_subject(user_id):
         repo.remove_user(user_id)
         return jsonify({'status': 'success'}), 200
     return jsonify({'status': 'failed', 'message': 'gallery not available'}), 200
